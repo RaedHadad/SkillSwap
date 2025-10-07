@@ -14,15 +14,15 @@ jobs:
           node-version: 20
           cache: pnpm
 
-      # Install pnpm (global is OK)
-      - name: Install pnpm
-        run: npm i -g pnpm@9.12.0
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.12.0 --activate
+          pnpm -v
 
-      # Use workspace install (important in a monorepo)
-      - name: Install dependencies
+      - name: Install (workspace)
         run: pnpm -w install
 
-      # Sanity: make sure the types you added are actually installed in the API pkg
       - name: Sanity — cors types in API
         run: pnpm -C apps/api ls @types/cors
 
