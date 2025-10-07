@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+apps/*/node_modules/
+packages/*/node_modules/
+.pnpm-store/
+
+# builds / artifacts
+.next/
+apps/*/.next/
+dist/
+apps/*/dist/
+out/
+apps/*/out/
+
+# env & local
+.env
+.env.*
+!.env.example
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# misc
+.DS_Store
+coverage/
