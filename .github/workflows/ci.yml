@@ -4,23 +4,25 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.12.0
-          run_install: false
+      # Install pnpm (global is OK)
+      - name: Install pnpm
+        run: npm i -g pnpm@9.12.0
 
-      - name: Install (workspace)
+      # Use workspace install (important in a monorepo)
+      - name: Install dependencies
         run: pnpm -w install
 
+      # Sanity: make sure the types you added are actually installed in the API pkg
       - name: Sanity — cors types in API
         run: pnpm -C apps/api ls @types/cors
 
