@@ -3,13 +3,18 @@
   "private": true,
   "version": "0.1.0",
   "packageManager": "pnpm@9.12.0",
-  "workspaces": ["apps/*","packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "concurrently -k -n api,web -c auto \"pnpm -C apps/api dev\" \"pnpm -C apps/web dev\"",
     "build": "pnpm -C apps/api build && pnpm -C apps/web build",
     "lint": "eslint ."
   },
   "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "concurrently": "^9.0.0",
     "eslint": "^9.13.0"
   }

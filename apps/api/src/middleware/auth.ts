@@ -1,22 +1,16 @@
-// apps/api/src/middleware/auth.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config';
 
-export interface AuthRequest extends Request {
-  user?: { id: string };
-}
+const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 
-export function authenticate(req: AuthRequest, res: Response, next: NextFunction) {
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : '';
-  if (!token) return res.status(401).json({ error: 'Missing token' });
-
+export function requireAuth(req: Request, res: Response, next: NextFunction) {
+  const h = req.headers.authorization || '';
+  const token = h.startsWith('Bearer ') ? h.slice(7) : '';
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as { id: string };
-    req.user = { id: payload.id };
+    const payload = jwt.verify(token, JWT_SECRET) as any;
+    (req as any).userId = payload.sub;
     next();
   } catch {
-    res.status(401).json({ error: 'Invalid token' });
+    res.status(401).json({ error: 'unauthorized' });
   }
 }
